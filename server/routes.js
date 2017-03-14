@@ -15,6 +15,8 @@ dashboard = require('./controllers/dashboard-controller'),
 passwords = require('./controllers/passwords-controller'),
 registrations = require('./controllers/registrations-controller'),
 sessions = require('./controllers/sessions-controller');
+// special bytwo library
+var bytwo = require('multiply-by-two');
 
 var stripeWebhook = new StripeWebhook({
   stripeApiKey: secrets.stripeOptions.apiKey,
@@ -116,4 +118,13 @@ module.exports = function (app, passport) {
     stripeWebhook.middleware,
     stripeEvents
   );
+
+  // new functionality for multiplying by two
+  app.get('/bytwo', function(req, res) {
+    var number = parseInt(req.query.num);
+    var error = 'You need to provide a num parameter';
+    if (!number) return res.status(400).send(err);
+    res.send(bytwo(number));
+  });
+
 };
